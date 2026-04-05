@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Truth or Dare 😈</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #1a0000, #000);
+    color: white;
+}
+
+/* LEFT AD */
+.left-ad {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 10%;
+    height: 100%;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* MAIN CONTENT */
+.wrapper {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.container {
+    margin-top: 40px;
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(25px);
+    background: rgba(255, 0, 0, 0.05);
+    box-shadow: 0 0 60px rgba(255, 0, 0, 0.3);
+    text-align: center;
+}
+
+h1 {
+    color: #ff4d4d;
+}
+
+/* buttons */
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    background: rgba(59,130,246,0.2);
+}
+
+/* OUTPUT TEXT */
+#output {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.08);
+    min-height: 80px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* RED DROPDOWN */
+select {
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255, 0, 0, 0.3);
+    color: white;
+    font-weight: bold;
+}
+
+/* slight shake for extreme */
+@keyframes softShake {
+    0% { transform: translate(0,0); }
+    50% { transform: translate(2px,-2px); }
+    100% { transform: translate(0,0); }
+}
+
+.shake {
+    animation: softShake 0.2s;
+}
+
+/* BOTTOM AD */
+.bottom-ad {
+    width: 100%;
+    height: 90px;
+    margin-top: 40px;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* misc */
+#judge { margin-top: 10px; color: #ff4d4d; }
+#users { margin-top: 10px; color: #3b82f6; font-size: 14px; }
+
+</style>
+</head>
+
+<body>
+
+<!-- LEFT AD BOX -->
+<div class="left-ad">
+    <!-- 🔥 Paste AdSense or ad code here -->
+    LEFT AD SPACE
+</div>
+
+<div class="wrapper">
+<div class="container">
+
+<h1>😈 AI Truth or Dare</h1>
+<p id="returnMsg"></p>
+
+<select id="level">
+    <option value="safe">😌</option>
+    <option value="spicy">🌶️</option>
+    <option value="extreme">💀</option>
+</select>
+
+<br>
+
+<button onclick="start('truth')">Truth</button>
+<button onclick="start('dare')">Dare</button>
+
+<div id="output">WAITING...</div>
+<div id="judge"></div>
+<div id="users"></div>
+
+</div>
+
+<!-- BOTTOM AD BOX -->
+<div class="bottom-ad">
+    <!-- 🔥 Paste AdSense or banner here -->
+    BOTTOM AD SPACE
+</div>
+
+</div>
+
+<script>
+
+/* VISITOR DETECTION */
+if(localStorage.getItem("visited")){
+    document.getElementById("returnMsg").innerText = "YOU'VE BEEN HERE BEFORE...";
+}else{
+    localStorage.setItem("visited", "true");
+    document.getElementById("returnMsg").innerText = "FIRST TIME? WELCOME 😈";
+}
+
+/* FAKE USERS */
+let users = Math.floor(Math.random()*2000)+1000;
+function updateUsers(){
+    users += Math.floor(Math.random()*20-10);
+    if(users < 1000) users = 1200;
+    document.getElementById("users").innerText = users + " PEOPLE PLAYING NOW";
+}
+setInterval(updateUsers,2000);
+updateUsers();
+
+/* GENERATE PROMPTS */
+function generateList(prefix, count) {
+    let arr = [];
+    for (let i = 0; i < count; i++) {
+        arr.push(prefix);
+    }
+    return arr;
+}
+
+const truths = {
+    safe: generateList("Tell a harmless truth", 100),
+    spicy: generateList("Reveal something spicy", 100),
+    extreme: generateList("Expose your darkest truth", 100)
+};
+
+const dares = {
+    safe: generateList("Do something easy", 100),
+    spicy: generateList("Do something bold", 100),
+    extreme: generateList("Do something risky", 100)
+};
+
+const judgeLines = [
+"YOU'RE PREDICTABLE 😏",
+"I’M WATCHING YOU 👁️",
+"YOU KEEP COMING BACK..."
+];
+
+/* FLOW */
+function start(type){
+    let output = document.getElementById("output");
+    output.innerText = "AI THINKING...";
+    setTimeout(()=>generate(type),800);
+}
+
+function generate(type){
+    let level = document.getElementById("level").value;
+    let list = type==="truth"?truths[level]:dares[level];
+
+    let item = list[Math.floor(Math.random()*list.length)];
+    let output = document.getElementById("output");
+
+    output.classList.remove("shake");
+    output.style.color = "white";
+
+    output.innerText = item.toUpperCase();
+
+    if(level==="extreme"){
+        output.classList.add("shake");
+        output.style.color = "#ff0000";
+    }
+
+    setTimeout(judgeUser,800);
+}
+
+function judgeUser(){
+    let j = judgeLines[Math.floor(Math.random()*judgeLines.length)];
+    document.getElementById("judge").innerText = j;
+}
+
+</script>
+
+</body>
+</html>
