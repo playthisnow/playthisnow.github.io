@@ -1,24 +1,169 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Truth or Dare 😈</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/* VISITOR */
-if(localStorage.getItem("visited")){
-    returnMsg.innerText = "YOU'VE BEEN HERE BEFORE...";
-}else{
-    localStorage.setItem("visited", true);
-    returnMsg.innerText = "FIRST TIME? WELCOME 😈";
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at center, #1a0000, #000);
+    color: white;
+    overflow-x: hidden;
 }
 
-/* USERS */
-let users = Math.floor(Math.random()*2000)+1000;
-const usersEl = document.getElementById("users");
+/* ADS */
+.left-ad {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 10%;
+    height: 100%;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.bottom-ad {
+    width: 100%;
+    height: 90px;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* MAIN */
+.wrapper {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.container {
+    margin-top: 40px;
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,0,0,0.05);
+    box-shadow: 0 0 40px rgba(255,0,0,0.3);
+    text-align: center;
+}
+
+h1 { color: #ff4d4d; }
+
+/* BUTTONS */
+button {
+    padding: 12px 22px;
+    margin: 10px;
+    border-radius: 15px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(135deg, rgba(59,130,246,0.4), rgba(59,130,246,0.1));
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px rgba(59,130,246,0.5);
+}
+
+/* SELECT */
+select {
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255,0,0,0.4);
+    color: white;
+    font-weight: bold;
+}
+
+/* OUTPUT */
+#output {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.08);
+    min-height: 80px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* SHAKE */
+@keyframes shake {
+    25% { transform: translate(2px,-2px); }
+    50% { transform: translate(-2px,2px); }
+    75% { transform: translate(2px,2px); }
+}
+.shake {
+    animation: shake 0.2s;
+}
+
+#judge {
+    margin-top: 10px;
+    color: #ff4d4d;
+}
+
+#users {
+    margin-top: 10px;
+    color: #3b82f6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="left-ad">AD SPACE</div>
+
+<div class="wrapper">
+<div class="container">
+
+<h1>😈 AI Truth or Dare</h1>
+<p id="returnMsg"></p>
+
+<select id="level">
+<option value="safe">😌</option>
+<option value="spicy">🌶️</option>
+<option value="extreme">💀</option>
+</select>
+
+<br>
+
+<button onclick="start('truth')">TRUTH</button>
+<button onclick="start('dare')">DARE</button>
+
+<div id="output">WAITING...</div>
+<div id="judge"></div>
+<div id="users"></div>
+
+</div>
+
+<div class="bottom-ad">BOTTOM AD</div>
+</div>
+
+<script>
+
+/* VISITOR DETECTION */
+if(localStorage.getItem("visited")){
+    returnMsg.innerText="YOU'VE BEEN HERE BEFORE...";
+}else{
+    localStorage.setItem("visited",true);
+    returnMsg.innerText="FIRST TIME? WELCOME 😈";
+}
+
+/* FAKE USERS */
+let users=Math.floor(Math.random()*2000)+1000;
 setInterval(()=>{
-    users += Math.floor(Math.random()*20-10);
-    if(users < 1000) users = 1200;
-    usersEl.innerText = users + " PEOPLE PLAYING NOW";
+    users+=Math.floor(Math.random()*20-10);
+    if(users<1000) users=1200;
+    usersEl.innerText=users+" PEOPLE PLAYING NOW";
 },2000);
 
-/* 🎲 SHUFFLE */
+const usersEl=document.getElementById("users");
+
+/* SHUFFLE */
 function shuffle(arr){
     for(let i=arr.length-1;i>0;i--){
         let j=Math.floor(Math.random()*(i+1));
@@ -27,83 +172,48 @@ function shuffle(arr){
     return arr;
 }
 
-/* 🧠 CREATE 100 UNIQUE PROMPTS (REAL STYLE) */
-function makeTruths(prefix){
-    let base = [
-        "WHAT IS YOUR BIGGEST SECRET?",
-        "WHO DO YOU LIKE RIGHT NOW?",
-        "WHAT IS YOUR MOST EMBARRASSING MOMENT?",
-        "WHAT IS YOUR BIGGEST FEAR?",
-        "WHAT IS SOMETHING YOU REGRET?",
-        "WHAT IS YOUR WEIRDEST HABIT?",
-        "WHO DO YOU THINK ABOUT THE MOST?",
-        "WHAT IS A LIE YOU TOLD RECENTLY?",
-        "WHAT IS YOUR MOST AWKWARD MEMORY?",
-        "WHAT IS YOUR BIGGEST INSECURITY?"
+/* CREATE 100 UNIQUE */
+function makeList(prefix){
+    let base=[
+        prefix+" 1",prefix+" 2",prefix+" 3",prefix+" 4",prefix+" 5",
+        prefix+" 6",prefix+" 7",prefix+" 8",prefix+" 9",prefix+" 10"
     ];
-
-    while(base.length < 100){
-        base.push(prefix + " " + (base.length+1));
+    while(base.length<100){
+        base.push(prefix+" "+(base.length+1));
     }
-
     return shuffle(base);
 }
 
-function makeDares(prefix){
-    let base = [
-        "SING LOUDLY FOR 10 SECONDS",
-        "DO 15 PUSHUPS",
-        "DANCE WITH NO MUSIC",
-        "TEXT SOMEONE RANDOM HELLO",
-        "TALK IN A FUNNY VOICE",
-        "SPIN 10 TIMES",
-        "MAKE A WEIRD FACE",
-        "CLAP FOR 20 SECONDS",
-        "ACT LIKE A ROBOT",
-        "DO A SILLY WALK"
-    ];
-
-    while(base.length < 100){
-        base.push(prefix + " " + (base.length+1));
-    }
-
-    return shuffle(base);
-}
-
-/* 🎯 DATA STORAGE */
-let data = {
-    truth: {
-        safe: makeTruths("SAFE TRUTH"),
-        spicy: makeTruths("SPICY TRUTH"),
-        extreme: makeTruths("EXTREME TRUTH")
+/* DATA */
+let data={
+    truth:{
+        safe:makeList("TELL A HARMLESS TRUTH"),
+        spicy:makeList("REVEAL SOMETHING SPICY"),
+        extreme:makeList("EXPOSE YOUR DARKEST TRUTH")
     },
-    dare: {
-        safe: makeDares("SAFE DARE"),
-        spicy: makeDares("SPICY DARE"),
-        extreme: makeDares("EXTREME DARE")
+    dare:{
+        safe:makeList("DO SOMETHING EASY"),
+        spicy:makeList("DO SOMETHING BOLD"),
+        extreme:makeList("DO SOMETHING RISKY")
     }
 };
 
-/* 🚫 STRICT NO REPEAT PICKER */
-function getItem(type, level){
-    let list = data[type][level];
-
-    // if empty → regenerate NEW 100 (no reuse memory)
-    if(list.length === 0){
-        data[type][level] = (type==="truth")
-            ? makeTruths(level.toUpperCase()+" TRUTH")
-            : makeDares(level.toUpperCase()+" DARE");
-
-        list = data[type][level];
+/* GET UNIQUE */
+function getItem(type,level){
+    if(data[type][level].length===0){
+        data[type][level]=makeList(
+            level==="safe"?(type==="truth"?"TELL A HARMLESS TRUTH":"DO SOMETHING EASY"):
+            level==="spicy"?(type==="truth"?"REVEAL SOMETHING SPICY":"DO SOMETHING BOLD"):
+            (type==="truth"?"EXPOSE YOUR DARKEST TRUTH":"DO SOMETHING RISKY")
+        );
     }
-
-    return list.pop(); // removes item → guarantees no repeat
+    return data[type][level].pop();
 }
 
 /* UI */
-const output = document.getElementById("output");
-const judge = document.getElementById("judge");
-const levelEl = document.getElementById("level");
+const output=document.getElementById("output");
+const judge=document.getElementById("judge");
+const levelEl=document.getElementById("level");
 
 const judgeLines=[
 "YOU'RE PREDICTABLE 😏",
@@ -113,26 +223,29 @@ const judgeLines=[
 
 function start(type){
     output.innerText="AI THINKING...";
-    setTimeout(()=>generate(type),600);
+    setTimeout(()=>generate(type),700);
 }
 
 function generate(type){
-    let level = levelEl.value;
-    let item = getItem(type, level);
+    let level=levelEl.value;
+    let item=getItem(type,level);
 
     output.classList.remove("shake");
-    output.style.color = "white";
+    output.style.color="white";
 
-    output.innerText = item;
+    output.innerText=item;
 
-    if(level === "extreme"){
+    if(level==="extreme"){
         output.classList.add("shake");
-        output.style.color = "#ff0000";
+        output.style.color="#ff0000";
     }
 
     setTimeout(()=>{
-        judge.innerText = judgeLines[Math.floor(Math.random()*judgeLines.length)];
-    },600);
+        judge.innerText=judgeLines[Math.floor(Math.random()*judgeLines.length)];
+    },700);
 }
 
 </script>
+<script src="https://pl29069598.profitablecpmratenetwork.com/b5/ec/0a/b5ec0a487c4ffe1b374cedf37be5e219.js"></script>
+</body>
+</html>
