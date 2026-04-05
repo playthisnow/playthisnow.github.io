@@ -1,178 +1,138 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Fake Chat Generator</title>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #0f172a, #1e3a8a);
-  color: white;
-}
-
-/* Layout */
-.container {
-  display: grid;
-  grid-template-columns: 20% 60% 20%;
-  height: 100vh;
-}
-
-/* Ads */
-.ad {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #aaa;
-  border-left: 1px solid rgba(255,255,255,0.1);
-  border-right: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Main content */
-.main {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Glass card */
-.glass {
-  width: 100%;
-  max-width: 400px;
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.1);
-  border-radius: 20px;
-  padding: 15px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.4);
-}
-
-/* Chat area */
-.chat-box {
-  height: 400px;
-  overflow-y: auto;
-  padding: 10px;
-  border-radius: 15px;
-  background: rgba(0,0,0,0.2);
-}
-
-/* Messages */
-.msg {
-  padding: 8px 12px;
-  margin: 5px 0;
-  border-radius: 12px;
-  max-width: 70%;
-  word-wrap: break-word;
-}
-
-.left {
-  background: #334155;
-  align-self: flex-start;
-}
-
-.right {
-  background: #2563eb;
-  align-self: flex-end;
-}
-
-/* Input */
-.controls {
-  margin-top: 10px;
-  display: flex;
-  gap: 5px;
-}
-
-input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-}
-
-/* Buttons */
-button {
-  padding: 8px 10px;
-  border: none;
-  border-radius: 10px;
-  background: #3b82f6;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #2563eb;
-}
-
-.download {
-  margin-top: 10px;
-  width: 100%;
-  background: #22c55e;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-  <!-- Left Ad -->
-  <div class="ad">
-    <p>Ad Space</p>
-  </div>
-
-  <!-- Main Tool -->
-  <div class="main">
-    <h2>Fake Chat Generator</h2>
-
-    <div class="glass" id="chatArea">
-      <div class="chat-box" id="chatBox"></div>
-    </div>
-
-    <div class="controls">
-      <input type="text" id="msgInput" placeholder="Type message...">
-      <button onclick="addMsg('left')">Left</button>
-      <button onclick="addMsg('right')">Right</button>
-    </div>
-
-    <button class="download" onclick="downloadChat()">Download Chat</button>
-  </div>
-
-  <!-- Right Ad -->
-  <div class="ad">
-    <p>Ad Space</p>
-  </div>
-
-</div>
-
 <script>
-function addMsg(side) {
-  const input = document.getElementById("msgInput");
-  const text = input.value.trim();
-  if (!text) return;
 
-  const msg = document.createElement("div");
-  msg.classList.add("msg", side);
-  msg.innerText = text;
-
-  document.getElementById("chatBox").appendChild(msg);
-  input.value = "";
-
-  document.getElementById("chatBox").scrollTop =
-    document.getElementById("chatBox").scrollHeight;
+/* VISITOR */
+if(localStorage.getItem("visited")){
+    returnMsg.innerText = "YOU'VE BEEN HERE BEFORE...";
+}else{
+    localStorage.setItem("visited", true);
+    returnMsg.innerText = "FIRST TIME? WELCOME 😈";
 }
 
-function downloadChat() {
-  html2canvas(document.getElementById("chatArea")).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "fake_chat.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  });
+/* USERS */
+let users = Math.floor(Math.random()*2000)+1000;
+const usersEl = document.getElementById("users");
+
+setInterval(()=>{
+    users += Math.floor(Math.random()*20-10);
+    if(users < 1000) users = 1200;
+    usersEl.innerText = users + " PEOPLE PLAYING NOW";
+},2000);
+
+/* 🎲 SHUFFLE */
+function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+        let j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
 }
+
+/* 🧠 CREATE 100 UNIQUE PROMPTS (REAL STYLE) */
+function makeTruths(prefix){
+    let base = [
+        "WHAT IS YOUR BIGGEST SECRET?",
+        "WHO DO YOU LIKE RIGHT NOW?",
+        "WHAT IS YOUR MOST EMBARRASSING MOMENT?",
+        "WHAT IS YOUR BIGGEST FEAR?",
+        "WHAT IS SOMETHING YOU REGRET?",
+        "WHAT IS YOUR WEIRDEST HABIT?",
+        "WHO DO YOU THINK ABOUT THE MOST?",
+        "WHAT IS A LIE YOU TOLD RECENTLY?",
+        "WHAT IS YOUR MOST AWKWARD MEMORY?",
+        "WHAT IS YOUR BIGGEST INSECURITY?"
+    ];
+
+    while(base.length < 100){
+        base.push(prefix + " " + (base.length+1));
+    }
+
+    return shuffle(base);
+}
+
+function makeDares(prefix){
+    let base = [
+        "SING LOUDLY FOR 10 SECONDS",
+        "DO 15 PUSHUPS",
+        "DANCE WITH NO MUSIC",
+        "TEXT SOMEONE RANDOM HELLO",
+        "TALK IN A FUNNY VOICE",
+        "SPIN 10 TIMES",
+        "MAKE A WEIRD FACE",
+        "CLAP FOR 20 SECONDS",
+        "ACT LIKE A ROBOT",
+        "DO A SILLY WALK"
+    ];
+
+    while(base.length < 100){
+        base.push(prefix + " " + (base.length+1));
+    }
+
+    return shuffle(base);
+}
+
+/* 🎯 DATA STORAGE */
+let data = {
+    truth: {
+        safe: makeTruths("SAFE TRUTH"),
+        spicy: makeTruths("SPICY TRUTH"),
+        extreme: makeTruths("EXTREME TRUTH")
+    },
+    dare: {
+        safe: makeDares("SAFE DARE"),
+        spicy: makeDares("SPICY DARE"),
+        extreme: makeDares("EXTREME DARE")
+    }
+};
+
+/* 🚫 STRICT NO REPEAT PICKER */
+function getItem(type, level){
+    let list = data[type][level];
+
+    // if empty → regenerate NEW 100 (no reuse memory)
+    if(list.length === 0){
+        data[type][level] = (type==="truth")
+            ? makeTruths(level.toUpperCase()+" TRUTH")
+            : makeDares(level.toUpperCase()+" DARE");
+
+        list = data[type][level];
+    }
+
+    return list.pop(); // removes item → guarantees no repeat
+}
+
+/* UI */
+const output = document.getElementById("output");
+const judge = document.getElementById("judge");
+const levelEl = document.getElementById("level");
+
+const judgeLines=[
+"YOU'RE PREDICTABLE 😏",
+"I’M WATCHING YOU 👁️",
+"YOU KEEP COMING BACK..."
+];
+
+function start(type){
+    output.innerText="AI THINKING...";
+    setTimeout(()=>generate(type),600);
+}
+
+function generate(type){
+    let level = levelEl.value;
+    let item = getItem(type, level);
+
+    output.classList.remove("shake");
+    output.style.color = "white";
+
+    output.innerText = item;
+
+    if(level === "extreme"){
+        output.classList.add("shake");
+        output.style.color = "#ff0000";
+    }
+
+    setTimeout(()=>{
+        judge.innerText = judgeLines[Math.floor(Math.random()*judgeLines.length)];
+    },600);
+}
+
 </script>
-
-</body>
-</html>
