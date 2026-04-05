@@ -2,232 +2,176 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>AI Truth or Dare 😈</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fake Chat Generator</title>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at top, #1a0000, #000);
-    color: white;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: white;
 }
 
-/* LEFT AD */
-.left-ad {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    background: rgba(255,255,255,0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-}
-
-/* MAIN CONTENT */
-.wrapper {
-    margin-left: 10%;
-    margin-right: 10%;
-}
-
+/* Layout */
 .container {
-    margin-top: 40px;
-    padding: 30px;
-    border-radius: 20px;
-    backdrop-filter: blur(25px);
-    background: rgba(255, 0, 0, 0.05);
-    box-shadow: 0 0 60px rgba(255, 0, 0, 0.3);
-    text-align: center;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  height: 100vh;
 }
 
-h1 {
-    color: #ff4d4d;
+/* Ads */
+.ad {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #aaa;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(255,255,255,0.1);
 }
 
-/* buttons */
+/* Main content */
+.main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Glass card */
+.glass {
+  width: 100%;
+  max-width: 400px;
+  backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+/* Chat area */
+.chat-box {
+  height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 15px;
+  background: rgba(0,0,0,0.2);
+}
+
+/* Messages */
+.msg {
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 12px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.left {
+  background: #334155;
+  align-self: flex-start;
+}
+
+.right {
+  background: #2563eb;
+  align-self: flex-end;
+}
+
+/* Input */
+.controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+/* Buttons */
 button {
-    padding: 12px 20px;
-    margin: 10px;
-    border-radius: 14px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    color: white;
-    background: rgba(59,130,246,0.2);
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
 }
 
-/* OUTPUT TEXT */
-#output {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(255,255,255,0.08);
-    min-height: 80px;
-    font-size: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
+button:hover {
+  background: #2563eb;
 }
 
-/* RED DROPDOWN */
-select {
-    padding: 10px;
-    border-radius: 12px;
-    border: none;
-    background: rgba(255, 0, 0, 0.3);
-    color: white;
-    font-weight: bold;
+.download {
+  margin-top: 10px;
+  width: 100%;
+  background: #22c55e;
 }
-
-/* slight shake for extreme */
-@keyframes softShake {
-    0% { transform: translate(0,0); }
-    50% { transform: translate(2px,-2px); }
-    100% { transform: translate(0,0); }
-}
-
-.shake {
-    animation: softShake 0.2s;
-}
-
-/* BOTTOM AD */
-.bottom-ad {
-    width: 100%;
-    height: 90px;
-    margin-top: 40px;
-    background: rgba(255,255,255,0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* misc */
-#judge { margin-top: 10px; color: #ff4d4d; }
-#users { margin-top: 10px; color: #3b82f6; font-size: 14px; }
-
 </style>
 </head>
 
 <body>
 
-<!-- LEFT AD BOX -->
-<div class="left-ad">
-    <!-- 🔥 Paste AdSense or ad code here -->
-    LEFT AD SPACE
-</div>
-
-<div class="wrapper">
 <div class="container">
 
-<h1>😈 AI Truth or Dare</h1>
-<p id="returnMsg"></p>
+  <!-- Left Ad -->
+  <div class="ad">
+    <p>Ad Space</p>
+  </div>
 
-<select id="level">
-    <option value="safe">😌</option>
-    <option value="spicy">🌶️</option>
-    <option value="extreme">💀</option>
-</select>
+  <!-- Main Tool -->
+  <div class="main">
+    <h2>Fake Chat Generator</h2>
 
-<br>
+    <div class="glass" id="chatArea">
+      <div class="chat-box" id="chatBox"></div>
+    </div>
 
-<button onclick="start('truth')">Truth</button>
-<button onclick="start('dare')">Dare</button>
+    <div class="controls">
+      <input type="text" id="msgInput" placeholder="Type message...">
+      <button onclick="addMsg('left')">Left</button>
+      <button onclick="addMsg('right')">Right</button>
+    </div>
 
-<div id="output">WAITING...</div>
-<div id="judge"></div>
-<div id="users"></div>
+    <button class="download" onclick="downloadChat()">Download Chat</button>
+  </div>
 
-</div>
-
-<!-- BOTTOM AD BOX -->
-<div class="bottom-ad">
-    <!-- 🔥 Paste AdSense or banner here -->
-    BOTTOM AD SPACE
-</div>
+  <!-- Right Ad -->
+  <div class="ad">
+    <p>Ad Space</p>
+  </div>
 
 </div>
 
 <script>
+function addMsg(side) {
+  const input = document.getElementById("msgInput");
+  const text = input.value.trim();
+  if (!text) return;
 
-/* VISITOR DETECTION */
-if(localStorage.getItem("visited")){
-    document.getElementById("returnMsg").innerText = "YOU'VE BEEN HERE BEFORE...";
-}else{
-    localStorage.setItem("visited", "true");
-    document.getElementById("returnMsg").innerText = "FIRST TIME? WELCOME 😈";
+  const msg = document.createElement("div");
+  msg.classList.add("msg", side);
+  msg.innerText = text;
+
+  document.getElementById("chatBox").appendChild(msg);
+  input.value = "";
+
+  document.getElementById("chatBox").scrollTop =
+    document.getElementById("chatBox").scrollHeight;
 }
 
-/* FAKE USERS */
-let users = Math.floor(Math.random()*2000)+1000;
-function updateUsers(){
-    users += Math.floor(Math.random()*20-10);
-    if(users < 1000) users = 1200;
-    document.getElementById("users").innerText = users + " PEOPLE PLAYING NOW";
+function downloadChat() {
+  html2canvas(document.getElementById("chatArea")).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "fake_chat.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
 }
-setInterval(updateUsers,2000);
-updateUsers();
-
-/* GENERATE PROMPTS */
-function generateList(prefix, count) {
-    let arr = [];
-    for (let i = 0; i < count; i++) {
-        arr.push(prefix);
-    }
-    return arr;
-}
-
-const truths = {
-    safe: generateList("Tell a harmless truth", 100),
-    spicy: generateList("Reveal something spicy", 100),
-    extreme: generateList("Expose your darkest truth", 100)
-};
-
-const dares = {
-    safe: generateList("Do something easy", 100),
-    spicy: generateList("Do something bold", 100),
-    extreme: generateList("Do something risky", 100)
-};
-
-const judgeLines = [
-"YOU'RE PREDICTABLE 😏",
-"I’M WATCHING YOU 👁️",
-"YOU KEEP COMING BACK..."
-];
-
-/* FLOW */
-function start(type){
-    let output = document.getElementById("output");
-    output.innerText = "AI THINKING...";
-    setTimeout(()=>generate(type),800);
-}
-
-function generate(type){
-    let level = document.getElementById("level").value;
-    let list = type==="truth"?truths[level]:dares[level];
-
-    let item = list[Math.floor(Math.random()*list.length)];
-    let output = document.getElementById("output");
-
-    output.classList.remove("shake");
-    output.style.color = "white";
-
-    output.innerText = item.toUpperCase();
-
-    if(level==="extreme"){
-        output.classList.add("shake");
-        output.style.color = "#ff0000";
-    }
-
-    setTimeout(judgeUser,800);
-}
-
-function judgeUser(){
-    let j = judgeLines[Math.floor(Math.random()*judgeLines.length)];
-    document.getElementById("judge").innerText = j;
-}
-
 </script>
 
 </body>
